@@ -5,42 +5,41 @@ import {
   getMyProfile,
   updateProfile,
   getPublicProfile,
-  searchFreelancers,
-} from "../controllers/freelancerController.js";
+} from "../controllers/clientController.js";
 
 import { protect, authorize } from "../middleware/authMiddleware.js";
+
 import validate from "../middleware/validate.js";
 
 import {
-  createFreelancerProfileSchema,
-  updateFreelancerProfileSchema,
-} from "../validators/freelancerSchemas.js";
+  createClientProfileSchema,
+  updateClientProfileSchema,
+} from "../validators/clientSchemas.js";
+
 const router = express.Router();
 
 router.post(
   "/profile",
   protect,
-  authorize("freelancer"),
-   validate(createFreelancerProfileSchema),
+  authorize("client"),
+  validate(createClientProfileSchema),
   createProfile
 );
 
 router.get(
   "/profile",
   protect,
-  authorize("freelancer"),
+  authorize("client"),
   getMyProfile
 );
 
 router.put(
   "/profile",
   protect,
-  authorize("freelancer"),
-   validate(updateFreelancerProfileSchema),
+  authorize("client"),
+  validate(updateClientProfileSchema),
   updateProfile
 );
-
-router.get("/search", searchFreelancers);
 
 router.get("/:id", getPublicProfile);
 
