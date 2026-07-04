@@ -1,16 +1,16 @@
 import express from "express";
 
 import {
-  apply,
-  myProposals,
-  gigProposals,
-  updateStatus,
+  createProposal,
+  getGigProposals,
+  getMyProposals,
+  acceptProposal,
+  rejectProposal,
 } from "../controllers/proposalController.js";
 
-import {
-  protect,
-  authorize,
-} from "../middleware/authMiddleware.js";
+import { protect, authorize } from "../middleware/authMiddleware.js";
+import validate from "../middleware/validate.js";
+import { proposalSchema } from "../validators/proposalSchemas.js";
 
 const router = express.Router();
 
@@ -18,28 +18,36 @@ router.post(
   "/:gigId",
   protect,
   authorize("freelancer"),
-  apply
+  validate(proposalSchema),
+  createProposal
 );
 
 router.get(
-  "/my",
+  "/my-proposals",
   protect,
   authorize("freelancer"),
-  myProposals
+  getMyProposals
 );
 
 router.get(
   "/gig/:gigId",
   protect,
   authorize("client"),
-  gigProposals
+  getGigProposals
 );
 
-router.patch(
-  "/:id",
+router.put(
+  "/accept/:id",
   protect,
   authorize("client"),
-  updateStatus
+  acceptProposal
+);
+
+router.put(
+  "/reject/:id",
+  protect,
+  authorize("client"),
+  rejectProposal
 );
 
 export default router;

@@ -6,10 +6,16 @@ import {
   getGig,
   updateGig,
   deleteGig,
+  getMyGigs,
 } from "../controllers/gigController.js";
 
-import { protect, authorize } from "../middleware/authMiddleware.js";
+import {
+  protect,
+  authorize,
+} from "../middleware/authMiddleware.js";
+
 import validate from "../middleware/validate.js";
+
 import {
   createGigSchema,
   updateGigSchema,
@@ -17,9 +23,16 @@ import {
 
 const router = express.Router();
 
+// Public Routes
 router.get("/", getAllGigs);
 
-router.get("/:id", getGig);
+// Client Routes
+router.get(
+  "/my-gigs",
+  protect,
+  authorize("client"),
+  getMyGigs
+);
 
 router.post(
   "/",
@@ -43,5 +56,8 @@ router.delete(
   authorize("client"),
   deleteGig
 );
+
+// Keep this LAST
+router.get("/:id", getGig);
 
 export default router;

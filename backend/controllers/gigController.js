@@ -18,6 +18,18 @@ export const getAllGigs = asyncHandler(async (req, res) => {
   );
 });
 
+export const getMyGigs = asyncHandler(async (req, res) => {
+  const gigs = await gigService.getMyGigs(req.user._id);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      "My gigs fetched successfully",
+      gigs
+    )
+  );
+});
+
 export const getGig = asyncHandler(async (req, res) => {
   const gig = await gigService.getGigById(req.params.id);
 

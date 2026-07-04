@@ -13,6 +13,13 @@ export const getAllGigs = async () => {
     .populate("client", "fullName avatar")
     .sort({ createdAt: -1 });
 };
+export const getMyGigs = async (userId) => {
+  return await Gig.find({
+    client: userId,
+  })
+    .populate("client", "fullName avatar")
+    .sort({ createdAt: -1 });
+};
 
 export const getGigById = async (id) => {
   const gig = await Gig.findById(id).populate(
