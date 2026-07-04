@@ -1,59 +1,77 @@
-import {
-  Briefcase,
-  FileText,
-  IndianRupee,
-  Users,
-} from "lucide-react";
-
-import StatCard from "../../components/dashboard/StatCard";
-import RecentJobs from "../../components/dashboard/RecentJobs";
-import RecentProposals from "../../components/dashboard/RecentProposals";
-import ProfileCard from "../../components/dashboard/ProfileCard";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
+
+  const { user } = useSelector(
+    (state) => state.auth
+  );
+
   return (
-    <div className="space-y-8">
 
-      <ProfileCard />
+    <div className="space-y-6">
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <h1 className="text-4xl font-bold">
 
-        <StatCard
-          title="Jobs"
-          value="24"
-          icon={<Briefcase />}
-        />
+        Welcome,
 
-        <StatCard
-          title="Proposals"
-          value="12"
-          icon={<FileText />}
-        />
+        {" "}
 
-        <StatCard
-          title="Clients"
-          value="8"
-          icon={<Users />}
-        />
+        {user?.fullName}
 
-        <StatCard
-          title="Earnings"
-          value="₹52K"
-          icon={<IndianRupee />}
-        />
+        👋
 
-      </div>
+      </h1>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="rounded-2xl bg-white p-8 shadow">
 
-        <RecentJobs />
+        <h2 className="text-2xl font-bold">
 
-        <RecentProposals />
+          Profile
+
+        </h2>
+
+        <div className="mt-6 space-y-3">
+
+          <p>
+
+            <b>Email :</b>
+
+            {" "}
+
+            {user?.email}
+
+          </p>
+
+          <p>
+
+            <b>Role :</b>
+
+            {" "}
+
+            {user?.role}
+
+          </p>
+
+          <p>
+
+            <b>Verified :</b>
+
+            {" "}
+
+            {user?.isVerified
+              ? "Yes"
+              : "No"}
+
+          </p>
+
+        </div>
 
       </div>
 
     </div>
+
   );
+
 }
 
 export default Dashboard;

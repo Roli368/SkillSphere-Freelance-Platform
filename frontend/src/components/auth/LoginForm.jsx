@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 
+import { loginSchema } from "../../schemas/authSchema";
 import { loginUser } from "../../services/authApi";
 
 import {
@@ -19,31 +21,21 @@ function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
   });
 
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      setLoading(true);
-
       dispatch(loginStart());
 
-      const { data } = await loginUser(form);
+      const response = await loginUser(data);
 
-      dispatch(loginSuccess(data.data));
+      dispatch(loginSuccess(response.data.data));
 
       toast.success("Login Successful");
 
@@ -51,72 +43,64 @@ function LoginForm() {
     } catch (error) {
       dispatch(
         loginFailure(
-          error.response?.data?.message || "Login Failed"
+          error.response?.data?.message ||
+            "Login Failed"
         )
       );
 
       toast.error(
-        error.response?.data?.message || "Login Failed"
+        error.response?.data?.message ||
+          "Login Failed"
       );
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <Card className="w-full max-w-md">
 
-      <h1 className="text-3xl font-bold mb-6 text-center">
+      <h1 className="mb-6 text-center text-3xl font-bold">
         Welcome Back
       </h1>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="space-y-5"
       >
-
         <Input
           label="Email"
           type="email"
           placeholder="Enter Email"
-          register={{
-            name: "email",
-            value: form.email,
-            onChange: handleChange,
-          }}
+          register={register("email")}
+          error={errors.email}
         />
 
         <Input
           label="Password"
           type="password"
           placeholder="Enter Password"
-          register={{
-            name: "password",
-            value: form.password,
-            onChange: handleChange,
-          }}
+          register={register("password")}
+          error={errors.password}
         />
 
         <Button
           type="submit"
-          disabled={loading}
+          disabled={isSubmitting}
         >
-          {loading ? "Logging in..." : "Login"}
+          {isSubmitting
+            ? "Logging in..."
+            : "Login"}
         </Button>
-
       </form>
 
       <p className="mt-5 text-center">
-
         Don't have an account?
 
         <Link
           to="/register"
-          className="text-blue-600 ml-2"
+          className="ml-2 text-blue-600"
         >
           Register
         </Link>
-
       </p>
 
     </Card>

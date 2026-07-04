@@ -1,6 +1,5 @@
-function Input({
+function Textarea({
   label,
-  type = "text",
   placeholder,
   error,
   register,
@@ -12,16 +11,16 @@ function Input({
         {label}
       </label>
 
-      <input
-        type={type}
+      <textarea
+        rows={5}
         placeholder={placeholder}
         {...register}
-        className={`w-full rounded-xl border px-4 py-3 outline-none transition
+        className={`w-full rounded-xl border px-4 py-3
 
         ${
           error
-            ? "border-red-500 focus:ring-red-300"
-            : "border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
+            ? "border-red-500"
+            : "border-slate-300"
         }`}
       />
 
@@ -35,4 +34,4 @@ function Input({
   );
 }
 
-export default Input;
+export default Textarea;

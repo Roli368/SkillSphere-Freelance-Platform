@@ -1,13 +1,17 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
 import Card from "../ui/Card";
 import Input from "../ui/Input";
+import Select from "../ui/Select";
 import Button from "../ui/Button";
 
+import { registerSchema } from "../../schemas/authSchema";
 import { registerUser } from "../../services/authApi";
+
 import {
   loginStart,
   loginSuccess,
@@ -15,131 +19,134 @@ import {
 } from "../../redux/slices/authSlice";
 
 function RegisterForm() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(registerSchema),
 
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    role: "freelancer",
+    defaultValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      role: "freelancer",
+    },
   });
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    console.log("Submitted Data:", data);
 
     try {
-      setLoading(true);
-
       dispatch(loginStart());
 
-      const { data } = await registerUser(form);
+      const response = await registerUser(data);
 
-      dispatch(loginSuccess(data.data));
+      console.log("Server Response:", response.data);
 
-      toast.success("Registration Successful");
+      dispatch(loginSuccess(response.data.data));
+
+      toast.success("Registration Successful 🎉");
+
+      reset();
 
       navigate("/dashboard");
     } catch (error) {
+      console.log("Register Error:", error.response?.data);
+
       dispatch(
         loginFailure(
-          error.response?.data?.message || "Registration Failed"
+          error.response?.data?.message ||
+            "Registration Failed"
         )
       );
 
-      toast.error(
-        error.response?.data?.message || "Registration Failed"
-      );
-    } finally {
-      setLoading(false);
+      if (error.response?.data?.errors) {
+        const firstError = Object.values(
+          error.response.data.errors
+        )[0];
+
+        toast.error(
+          Array.isArray(firstError)
+            ? firstError[0]
+            : firstError
+        );
+      } else {
+        toast.error(
+          error.response?.data?.message ||
+            "Registration Failed"
+        );
+      }
     }
   };
 
   return (
     <Card className="w-full max-w-lg">
-      <h1 className="text-3xl font-bold text-center mb-6">
+      <h1 className="mb-6 text-center text-3xl font-bold">
         Create Account
       </h1>
 
       <form
-        onSubmit={handleSubmit}
-        className="space-y-4"
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5"
       >
         <Input
           label="Full Name"
-          register={{
-            name: "fullName",
-            value: form.fullName,
-            onChange: handleChange,
-          }}
+          placeholder="Enter your full name"
+          register={register("fullName")}
+          error={errors.fullName}
         />
 
         <Input
           label="Email"
           type="email"
-          register={{
-            name: "email",
-            value: form.email,
-            onChange: handleChange,
-          }}
+          placeholder="Enter your email"
+          register={register("email")}
+          error={errors.email}
         />
 
         <Input
           label="Password"
           type="password"
-          register={{
-            name: "password",
-            value: form.password,
-            onChange: handleChange,
-          }}
+          placeholder="Enter your password"
+          register={register("password")}
+          error={errors.password}
         />
 
-        <div>
-          <label className="font-semibold">
-            Select Role
-          </label>
+        <Select
+          label="Role"
+          register={register("role")}
+          error={errors.role}
+        >
+          <option value="freelancer">
+            Freelancer
+          </option>
 
-          <select
-            name="role"
-            value={form.role}
-            onChange={handleChange}
-            className="mt-2 w-full rounded-xl border p-3"
-          >
-            <option value="freelancer">
-              Freelancer
-            </option>
-
-            <option value="client">
-              Client
-            </option>
-          </select>
-        </div>
+          <option value="client">
+            Client
+          </option>
+        </Select>
 
         <Button
           type="submit"
-          disabled={loading}
+          disabled={isSubmitting}
         >
-          {loading
-            ? "Creating..."
+          {isSubmitting
+            ? "Creating Account..."
             : "Create Account"}
         </Button>
       </form>
 
-      <p className="mt-5 text-center">
+      <p className="mt-6 text-center text-slate-600">
         Already have an account?
 
         <Link
           to="/login"
-          className="text-blue-600 ml-2"
+          className="ml-2 font-semibold text-blue-600 hover:underline"
         >
           Login
         </Link>

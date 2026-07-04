@@ -20,29 +20,31 @@ const authSlice = createSlice({
     },
 
     loginSuccess: (state, action) => {
-      state.loading = false;
-      state.user = action.payload.user;
-      state.token = action.payload.accessToken;
-      state.isAuthenticated = true;
+  state.loading = false;
+  state.user = action.payload.user;
+  state.token = action.payload.accessToken;
+  state.isAuthenticated = true;
+  state.error = null;
 
-      localStorage.setItem(
-        "token",
-        action.payload.accessToken
-      );
-    },
-
+  localStorage.setItem(
+    "token",
+    action.payload.accessToken
+  );
+},
     loginFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
 
     logout: (state) => {
-      state.user = null;
-      state.token = "";
-      state.isAuthenticated = false;
+  state.user = null;
+  state.token = "";
+  state.loading = false;
+  state.error = null;
+  state.isAuthenticated = false;
 
-      localStorage.removeItem("token");
-    },
+  localStorage.removeItem("token");
+},
   },
 });
 

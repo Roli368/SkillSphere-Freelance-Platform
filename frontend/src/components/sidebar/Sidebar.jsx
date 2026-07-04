@@ -27,7 +27,7 @@ function Sidebar() {
         />
 
         <SidebarItem
-          to="/freelancer-profile"
+          to="/profile"
           icon={<User size={20} />}
           text="Profile"
         />
