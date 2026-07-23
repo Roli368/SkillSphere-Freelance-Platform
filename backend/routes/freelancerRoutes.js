@@ -18,7 +18,7 @@ import {
 const router = express.Router();
 
 router.post(
-  "/profile",
+  "/",
   protect,
   authorize("freelancer"),
    validate(createFreelancerProfileSchema),
@@ -26,14 +26,14 @@ router.post(
 );
 
 router.get(
-  "/profile",
+  "/me",
   protect,
   authorize("freelancer"),
   getMyProfile
 );
 
 router.put(
-  "/profile",
+  "/me",
   protect,
   authorize("freelancer"),
    validate(updateFreelancerProfileSchema),
