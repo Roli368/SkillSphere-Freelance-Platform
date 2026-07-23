@@ -72,6 +72,18 @@ const userSchema = new mongoose.Schema(
     lastLogin: {
       type: Date,
       default: null,
+    },
+    googleId: {
+      type: String,
+      default: null,
+    },
+    twoFactorSecret: {
+      type: String,
+      default: null,
+    },
+    isTwoFactorEnabled: {
+      type: Boolean,
+      default: false,
     }
   },
   {

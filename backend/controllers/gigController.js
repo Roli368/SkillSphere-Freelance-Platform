@@ -11,10 +11,22 @@ export const createGig = asyncHandler(async (req, res) => {
 });
 
 export const getAllGigs = asyncHandler(async (req, res) => {
-  const gigs = await gigService.getAllGigs();
+  const gigs = await gigService.getAllGigs(req.query);
 
   res.status(200).json(
     new ApiResponse(200, "Gigs fetched", gigs)
+  );
+});
+
+export const getMyGigs = asyncHandler(async (req, res) => {
+  const gigs = await gigService.getMyGigs(req.user._id);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      "My gigs fetched successfully",
+      gigs
+    )
   );
 });
 

@@ -17,6 +17,7 @@ const proposalSchema = new mongoose.Schema(
     coverLetter: {
       type: String,
       required: true,
+      trim: true,
     },
 
     bidAmount: {
@@ -35,7 +36,6 @@ const proposalSchema = new mongoose.Schema(
         "Pending",
         "Accepted",
         "Rejected",
-        "Withdrawn",
       ],
       default: "Pending",
     },
@@ -45,14 +45,7 @@ const proposalSchema = new mongoose.Schema(
   }
 );
 
-proposalSchema.index(
-  {
-    gig: 1,
-    freelancer: 1,
-  },
-  {
-    unique: true,
-  }
+export default mongoose.model(
+  "Proposal",
+  proposalSchema
 );
-
-export default mongoose.model("Proposal", proposalSchema);

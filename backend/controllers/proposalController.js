@@ -1,9 +1,10 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
+
 import * as proposalService from "../services/proposalService.js";
 
-export const apply = asyncHandler(
-  async (req, res) => {
+export const createProposal =
+  asyncHandler(async (req, res) => {
     const proposal =
       await proposalService.createProposal(
         req.user._id,
@@ -11,35 +12,20 @@ export const apply = asyncHandler(
         req.body
       );
 
-    res.status(201).json(
-      new ApiResponse(
-        201,
-        "Applied Successfully",
-        proposal
-      )
-    );
-  }
-);
-
-export const myProposals =
-  asyncHandler(async (req, res) => {
-    const data =
-      await proposalService.myProposals(
-        req.user._id
+    res
+      .status(201)
+      .json(
+        new ApiResponse(
+          201,
+          "Proposal submitted",
+          proposal
+        )
       );
-
-    res.json(
-      new ApiResponse(
-        200,
-        "Fetched",
-        data
-      )
-    );
   });
 
-export const gigProposals =
+export const getGigProposals =
   asyncHandler(async (req, res) => {
-    const data =
+    const proposals =
       await proposalService.getGigProposals(
         req.params.gigId
       );
@@ -47,24 +33,57 @@ export const gigProposals =
     res.json(
       new ApiResponse(
         200,
-        "Fetched",
-        data
+        "Success",
+        proposals
       )
     );
   });
 
-export const updateStatus =
+export const getMyProposals =
   asyncHandler(async (req, res) => {
-    const proposal =
-      await proposalService.updateStatus(
-        req.params.id,
-        req.body.status
+    const proposals =
+      await proposalService.getMyProposals(
+        req.user._id
       );
 
     res.json(
       new ApiResponse(
         200,
-        "Updated",
+        "Success",
+        proposals
+      )
+    );
+  });
+
+export const acceptProposal =
+  asyncHandler(async (req, res) => {
+    const proposal =
+      await proposalService.updateProposalStatus(
+        req.params.id,
+        "Accepted"
+      );
+
+    res.json(
+      new ApiResponse(
+        200,
+        "Accepted",
+        proposal
+      )
+    );
+  });
+
+export const rejectProposal =
+  asyncHandler(async (req, res) => {
+    const proposal =
+      await proposalService.updateProposalStatus(
+        req.params.id,
+        "Rejected"
+      );
+
+    res.json(
+      new ApiResponse(
+        200,
+        "Rejected",
         proposal
       )
     );

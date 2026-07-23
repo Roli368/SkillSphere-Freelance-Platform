@@ -108,6 +108,25 @@ const freelancerProfileSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    
+    certifications: [
+      {
+        name: String,
+        issuer: String,
+        year: Number,
+        link: String,
+      },
+    ],
+
+    verificationBadge: {
+      type: Boolean,
+      default: false,
+    },
+
+    milestonePricing: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

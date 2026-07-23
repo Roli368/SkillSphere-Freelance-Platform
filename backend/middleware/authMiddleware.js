@@ -8,50 +8,110 @@ import asyncHandler from "../utils/asyncHandler.js";
  * Verifies JWT and attaches authenticated user to req.user
  */
 export const protect = asyncHandler(async (req, res, next) => {
-  let token;
+  try {
+    let token;
 
-  // Check Authorization Header
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer ")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
+    // Authorization Header
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer ")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
+    // Cookie Fallback (for future refresh-token support)
+    if (!token && req.cookies?.accessToken) {
+      token = req.cookies.accessToken;
+    }
+
+    if (!token) {
+      throw new ApiError(
+        401,
+        "Access denied. Please login to continue."
+      );
+    }
+
+    // Verify JWT
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    // Find User
+    const user = await User.findById(decoded.id).select(
+      "-password -refreshToken"
+    );
+
+    if (!user) {
+      throw new ApiError(
+        401,
+        "User account not found."
+      );
+    }
+
+    // Block inactive users
+    if (user.isActive === false) {
+      throw new ApiError(
+        403,
+        "Your account has been deactivated."
+      );
+    }
+
+    req.user = user;
+
+    next();
+
+  } catch (err) {
+
+    if (err.name === "TokenExpiredError") {
+      return next(
+        new ApiError(
+          401,
+          "Session expired. Please login again."
+        )
+      );
+    }
+
+    if (err.name === "JsonWebTokenError") {
+      return next(
+        new ApiError(
+          401,
+          "Invalid authentication token."
+        )
+      );
+    }
+
+    return next(err);
   }
-
-  if (!token) {
-    throw new ApiError(401, "Access denied. Please login to continue.");
-  }
-
-  // Verify Token
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  // Find User
-  const user = await User.findById(decoded.id).select("-password");
-
-  if (!user) {
-    throw new ApiError(401, "User not found.");
-  }
-
-  req.user = user;
-
-  next();
 });
 
 /**
  * Role Based Authorization
  * Usage:
- * authorize("admin")
  * authorize("client")
  * authorize("freelancer")
- * authorize("admin", "client")
+ * authorize("admin")
+ * authorize("admin","client")
  */
 export const authorize = (...roles) => {
   return (req, res, next) => {
+
+    if (!req.user) {
+      return next(
+        new ApiError(
+          401,
+          "Authentication required."
+        )
+      );
+    }
+
     if (!roles.includes(req.user.role)) {
       return next(
         new ApiError(
           403,
-          "You are not authorized to access this resource."
+          `Access denied. Required role: ${roles.join(
+            " or "
+          )}`
         )
       );
     }
