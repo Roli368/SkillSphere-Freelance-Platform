@@ -35,7 +35,7 @@ const NotificationBell = ({ userId }) => {
     
     socket.emit("join", userId);
 
-    socket.on("notification", (newNotif) => {
+    socket.on("newNotification", (newNotif) => {
       setNotifications((prev) => [newNotif, ...prev]);
       setUnreadCount((prev) => prev + 1);
       
@@ -48,7 +48,7 @@ const NotificationBell = ({ userId }) => {
     });
 
     return () => {
-      socket.off("notification");
+      socket.off("newNotification");
     };
   }, [userId]);
 

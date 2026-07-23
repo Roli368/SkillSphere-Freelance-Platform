@@ -22,13 +22,19 @@ function Profile() {
       try {
         const reviewRes = await getReviews(user._id || user.id);
         setReviews(reviewRes.data.data);
+      } catch (err) {
+        toast.error("Unable to load reviews");
+      }
 
-        if (user?.role === "freelancer") {
+      if (user?.role === "freelancer") {
+        try {
           const profileRes = await getMyFreelancerProfile();
           setFreelancerProfile(profileRes.data.data);
+        } catch (err) {
+          // If the profile doesn't exist yet, it will throw a 404.
+          // This is expected for new freelancers, so we don't need to show an error toast.
+          setFreelancerProfile(null);
         }
-      } catch (err) {
-        toast.error("Unable to load profile data");
       }
     };
 
