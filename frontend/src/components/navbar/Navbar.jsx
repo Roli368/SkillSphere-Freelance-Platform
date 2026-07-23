@@ -15,6 +15,7 @@ import { getUnreadCount } from "../../services/notificationApi";
 import { useTheme } from "../../context/ThemeContext";
 import { getSocket } from "../../services/socket";
 import Logo from "../ui/Logo";
+import NotificationBell from "../notifications/NotificationBell";
 
 function Navbar({ onMenuClick }) {
   const { user } = useSelector((state) => state.auth);
@@ -111,17 +112,7 @@ function Navbar({ onMenuClick }) {
 
           {user ? (
             <div className="flex items-center gap-4">
-              <Link
-                to="/notifications"
-                className="relative p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
-              >
-                <Bell size={20} />
-                {count > 0 && (
-                  <span className="absolute 0 top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white ring-2 ring-white dark:ring-slate-950">
-                    {count}
-                  </span>
-                )}
-              </Link>
+              <NotificationBell userId={user._id || user.id} />
 
               <div className="h-8 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
 
