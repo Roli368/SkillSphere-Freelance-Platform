@@ -23,12 +23,19 @@ export const suspendAccount = async (req, res) => {
 
 export const verifyFreelancer = async (req, res) => {
   try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id, 
+      { isVerified: true }, 
+      { new: true }
+    );
+    
     const profile = await FreelancerProfile.findOneAndUpdate(
       { user: req.params.id }, 
       { verificationBadge: true }, 
       { new: true }
     );
-    res.status(200).json({ message: 'Freelancer verified', profile });
+    
+    res.status(200).json({ message: 'Freelancer verified', user, profile });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

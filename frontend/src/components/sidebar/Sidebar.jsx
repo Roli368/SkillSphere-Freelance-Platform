@@ -85,6 +85,19 @@ function Sidebar({ onClose, isCollapsed, onToggleCollapse }) {
           </>
         )}
 
+        {/* Admin */}
+        {user?.role === "admin" && (
+          <>
+            {!isCollapsed && (
+              <div className="pt-4 pb-2 px-3 transition-opacity duration-300">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Admin Actions</p>
+              </div>
+            )}
+            {isCollapsed && <div className="h-4"></div>}
+            <SidebarItem isCollapsed={isCollapsed} to="/manage-users" icon={<User size={20} />} text="Manage Users" onClick={onClose} />
+          </>
+        )}
+
         {!isCollapsed && (
           <div className="pt-4 pb-2 px-3 transition-opacity duration-300">
             <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Personal</p>

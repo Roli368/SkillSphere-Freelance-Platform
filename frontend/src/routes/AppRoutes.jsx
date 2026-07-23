@@ -20,6 +20,8 @@ import Notifications from "../pages/notifications/Notifications";
 import Chat from "../pages/chat/Chat";
 import Settings from "../pages/settings/Settings";
 import Favorites from "../pages/favorites/Favorites";
+import ManageUsers from "../pages/admin/ManageUsers";
+
 function AppRoutes() {
   return (
     <Routes>
@@ -50,6 +52,7 @@ function AppRoutes() {
         <Route  path="/messages"   element={<Chat />} />
         <Route path="/settings" element={<Settings />} /> 
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/manage-users" element={<ManageUsers />} />
       </Route>
 
     </Routes>
