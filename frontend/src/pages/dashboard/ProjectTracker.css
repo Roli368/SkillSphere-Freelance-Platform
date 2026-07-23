@@ -1,0 +1,199 @@
+.tracker-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  background: #fcfcfd;
+  min-height: 100vh;
+}
+
+.tracker-header h1 {
+  font-size: 2.2rem;
+  color: #1a1a2e;
+  margin-bottom: 24px;
+}
+
+.progress-bar-container {
+  height: 12px;
+  background: #e9ecef;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #2bd483 100%);
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+  text-align: right;
+  font-weight: 700;
+  color: #2bd483;
+  font-size: 1.1rem;
+}
+
+.tracker-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.milestones-section h2, .logs-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: #1a1a2e;
+}
+
+.milestone-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  border-left: 5px solid #ccc;
+  transition: transform 0.2s ease;
+}
+
+.milestone-card:hover {
+  transform: translateX(5px);
+}
+
+.milestone-card.approved { border-left-color: #2bd483; }
+.milestone-card.in-progress { border-left-color: #3b82f6; }
+.milestone-card.pending { border-left-color: #f5a623; }
+
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.milestone-header h3 {
+  font-size: 1.2rem;
+  color: #222b45;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.approved { background: #e5f9e0; color: #2e7d32; }
+.status-badge.in-progress { background: #e3f2fd; color: #1565c0; }
+.status-badge.pending { background: #fff8e1; color: #f57f17; }
+
+.milestone-details {
+  display: flex;
+  gap: 24px;
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.milestone-files h4 {
+  font-size: 0.9rem;
+  color: #8f9bb3;
+  margin-bottom: 8px;
+}
+
+.milestone-files ul {
+  list-style: none;
+  padding: 0;
+}
+
+.milestone-files li {
+  font-size: 0.9rem;
+  color: #3b82f6;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.btn-upload {
+  margin-top: 16px;
+  background: #f4f7f6;
+  color: #3b82f6;
+  border: 1px dashed #3b82f6;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-upload:hover {
+  background: #e3f2fd;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 24px;
+  border-left: 2px solid #e9ecef;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -31px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 2px solid white;
+}
+
+.timeline-content {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.log-time {
+  font-size: 0.8rem;
+  color: #8f9bb3;
+  margin-bottom: 4px;
+}
+
+.log-message {
+  color: #222b45;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.add-log {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.log-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.btn-log {
+  background: #1a1a2e;
+  color: white;
+  border: none;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}

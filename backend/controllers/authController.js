@@ -45,6 +45,42 @@ export const updateProfile = asyncHandler(async (req, res) => {
   );
 });
 
+
+import cloudinary from "../config/cloudinary.js";
+import User from "../models/User.js";
+
+export const uploadAvatar = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, "No file uploaded"));
+  }
+
+  const result = await new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder: "skillsphere/avatars", timeout: 120000 },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    ).end(req.file.buffer);
+  });
+
+  const user = await User.findById(req.user._id);
+
+  user.avatar = result.secure_url;
+
+  await user.save();
+
+  res.json(
+    new ApiResponse(
+      200,
+      "Avatar updated successfully",
+      user
+    )
+  );
+});
+
 export const logout = asyncHandler(async (req, res) => {
   await authService.logout(req.user._id);
 

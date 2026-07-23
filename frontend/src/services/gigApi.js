@@ -17,3 +17,6 @@ export const deleteGig = (id) =>
 
 export const getMyGigs = () =>
   api.get("/gigs/my-gigs");
+
+export const searchGigs = (params) =>
+  api.get("/gigs", {    params,  });

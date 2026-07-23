@@ -1,6 +1,7 @@
 import Proposal from "../models/Proposal.js";
 import Gig from "../models/Gig.js";
 import ApiError from "../utils/ApiError.js";
+import { createNotification } from "./notificationService.js";
 
 /**
  * Create Proposal
@@ -46,6 +47,14 @@ export const createProposal = async (
   gig.proposalsCount += 1;
   await gig.save();
 
+  // Notify the client
+  await createNotification(
+    gig.client,
+    "New Proposal",
+    `You have received a new proposal for your gig "${gig.title}".`,
+    "proposal"
+  );
+
   return proposal;
 };
 
@@ -87,7 +96,7 @@ export const updateProposalStatus = async (
 ) => {
   const proposal = await Proposal.findById(
     proposalId
-  );
+  ).populate("gig");
 
   if (!proposal) {
     throw new ApiError(
@@ -102,7 +111,7 @@ export const updateProposalStatus = async (
 
   if (status === "Accepted") {
     await Gig.findByIdAndUpdate(
-      proposal.gig,
+      proposal.gig._id,
       {
         status: "In Progress",
         hiredFreelancer:
@@ -110,6 +119,14 @@ export const updateProposalStatus = async (
       }
     );
   }
+
+  // Notify the freelancer
+  await createNotification(
+    proposal.freelancer,
+    `Proposal ${status}`,
+    `Your proposal for the gig "${proposal.gig.title}" has been ${status.toLowerCase()}.`,
+    "proposal"
+  );
 
   return proposal;
 };

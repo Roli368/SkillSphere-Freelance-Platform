@@ -14,9 +14,12 @@ import CreateGig from "../pages/gigs/CreateGig";
 import GigDetails from "../pages/gigs/GigDetails";
 import EditGig from "../pages/gigs/EditGig";
 import MyGigs from "../pages/gigs/MyGigs";
-
-
-
+import MyProposals from "../pages/proposals/MyProposals";
+import GigProposals from "../pages/proposals/GigProposals";
+import Notifications from "../pages/notifications/Notifications";
+import Chat from "../pages/chat/Chat";
+import Settings from "../pages/settings/Settings";
+import Favorites from "../pages/favorites/Favorites";
 function AppRoutes() {
   return (
     <Routes>
@@ -41,7 +44,12 @@ function AppRoutes() {
         <Route path="/my-gigs" element={<MyGigs />} />
         <Route path="/gig/:id" element={<GigDetails />} />
         <Route path="/edit-gig/:id" element={<EditGig />} />
-
+        <Route path="/my-proposals" element={<MyProposals />} />
+        <Route path="/gig-proposals/:gigId" element={<GigProposals />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route  path="/messages"   element={<Chat />} />
+        <Route path="/settings" element={<Settings />} /> 
+        <Route path="/favorites" element={<Favorites />} />
       </Route>
 
     </Routes>

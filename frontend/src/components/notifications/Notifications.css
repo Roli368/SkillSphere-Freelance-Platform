@@ -1,0 +1,142 @@
+.notification-bell-wrapper {
+  position: relative;
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+}
+
+.bell-icon {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: relative;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.bell-icon:hover {
+  background: #f1f5f9;
+}
+
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  height: 18px;
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 350px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid #f1f5f9;
+  z-index: 100;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.dropdown-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.mark-read-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mark-read-btn:hover {
+  text-decoration: underline;
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.empty-notifs {
+  padding: 24px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.notification-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.notification-item:hover {
+  background: #f8fafc;
+}
+
+.notification-item.unread {
+  background: #eff6ff;
+}
+
+.notification-item.unread:hover {
+  background: #e0f2fe;
+}
+
+.notif-icon {
+  font-size: 1.5rem;
+  background: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.notif-content h5 {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.notif-content p {
+  margin: 0 0 6px 0;
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.notif-content .time {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}

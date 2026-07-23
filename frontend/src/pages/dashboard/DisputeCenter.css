@@ -1,0 +1,141 @@
+.dispute-center-container {
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.dispute-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.header-text h1 {
+  font-size: 2.2rem;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.header-text p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.btn-new-dispute {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-new-dispute:hover {
+  background: #dc2626;
+}
+
+.disputes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dispute-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  border: 1px solid #f1f5f9;
+}
+
+.dispute-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.dispute-gig-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dispute-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.dispute-status.open { background: #fee2e2; color: #991b1b; }
+.dispute-status.under-review { background: #fef3c7; color: #b45309; }
+.dispute-status.closed { background: #f1f5f9; color: #475569; }
+
+.dispute-reason {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 4px solid #ef4444;
+}
+
+.dispute-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dispute-date {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.btn-view-details {
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-view-details:hover {
+  background: #e2e8f0;
+}
+
+.modal-subtitle {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.btn-submit-dispute {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}

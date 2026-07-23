@@ -58,7 +58,7 @@ function LoginForm() {
   return (
     <Card className="w-full max-w-md">
 
-      <h1 className="mb-6 text-center text-3xl font-bold">
+      <h1 className="mb-6 text-center text-3xl font-bold dark:text-white">
         Welcome Back
       </h1>
 
@@ -92,12 +92,12 @@ function LoginForm() {
         </Button>
       </form>
 
-      <p className="mt-5 text-center">
+      <p className="mt-5 text-center text-slate-600 dark:text-slate-400">
         Don't have an account?
 
         <Link
           to="/register"
-          className="ml-2 text-blue-600"
+          className="ml-2 font-semibold text-brand-600 dark:text-brand-400 hover:underline"
         >
           Register
         </Link>
