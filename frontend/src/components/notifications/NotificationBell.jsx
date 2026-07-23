@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Notifications.css';
-// import { io } from "socket.io-client";
+import { getSocket } from '../../services/socket';
+import { getNotifications, getUnreadCount, markAllAsRead, markAsRead } from '../../services/notificationApi';
 
 const NotificationBell = ({ userId }) => {
   const [notifications, setNotifications] = useState([]);
@@ -8,18 +9,30 @@ const NotificationBell = ({ userId }) => {
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
-    // Simulated initial fetch
-    const initialNotifs = [
-      { _id: 'n1', type: 'payment', title: 'Payment Received', message: 'Escrow released $1500 for E-Commerce Gig.', read: false, createdAt: new Date() },
-      { _id: 'n2', type: 'review', title: 'New Review', message: 'Client left a 5-star verified review.', read: false, createdAt: new Date(Date.now() - 3600000) },
-      { _id: 'n3', type: 'gig', title: 'New Gig Match', message: 'A gig matches your AI skill profile.', read: true, createdAt: new Date(Date.now() - 86400000) }
-    ];
-    setNotifications(initialNotifs);
-    setUnreadCount(initialNotifs.filter(n => !n.read).length);
+    if (!userId) return;
 
-    /* 
+    // Fetch initial notifications
+    const fetchNotifs = async () => {
+      try {
+        const notifRes = await getNotifications();
+        setNotifications(notifRes.data.data);
+        
+        const unreadRes = await getUnreadCount();
+        setUnreadCount(unreadRes.data.data.count);
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+      }
+    };
+    
+    fetchNotifs();
+
     // Socket.io integration
-    const socket = io("http://localhost:5000");
+    const socket = getSocket();
+    
+    if (!socket.connected) {
+      socket.connect();
+    }
+    
     socket.emit("join", userId);
 
     socket.on("notification", (newNotif) => {
@@ -29,17 +42,35 @@ const NotificationBell = ({ userId }) => {
       // Optional: Browser Notification API
       if (Notification.permission === 'granted') {
         new Notification(newNotif.title, { body: newNotif.message });
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission();
       }
     });
 
-    return () => socket.disconnect();
-    */
+    return () => {
+      socket.off("notification");
+    };
   }, [userId]);
 
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
-    setUnreadCount(0);
-    // API call to PUT /api/notifications/read-all
+  const handleMarkAllAsRead = async () => {
+    try {
+      await markAllAsRead();
+      setNotifications(notifications.map(n => ({ ...n, read: true })));
+      setUnreadCount(0);
+    } catch (error) {
+      console.error("Failed to mark all as read:", error);
+    }
+  };
+
+  const handleMarkAsRead = async (id, isRead) => {
+    if (isRead) return;
+    try {
+      await markAsRead(id);
+      setNotifications(notifications.map(n => n._id === id ? { ...n, read: true } : n));
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error("Failed to mark as read:", error);
+    }
   };
 
   return (
@@ -53,7 +84,7 @@ const NotificationBell = ({ userId }) => {
         <div className="notification-dropdown">
           <div className="dropdown-header">
             <h4>Notifications</h4>
-            <button onClick={markAllAsRead} className="mark-read-btn">Mark all read</button>
+            <button onClick={handleMarkAllAsRead} className="mark-read-btn">Mark all read</button>
           </div>
           
           <div className="notification-list">
@@ -61,7 +92,11 @@ const NotificationBell = ({ userId }) => {
               <p className="empty-notifs">No new notifications.</p>
             ) : (
               notifications.map(n => (
-                <div key={n._id} className={`notification-item ${!n.read ? 'unread' : ''}`}>
+                <div 
+                  key={n._id} 
+                  className={`notification-item ${!n.read ? 'unread' : ''}`}
+                  onClick={() => handleMarkAsRead(n._id, n.read)}
+                >
                   <div className="notif-icon">
                     {n.type === 'payment' ? '💳' : n.type === 'review' ? '⭐' : '📢'}
                   </div>

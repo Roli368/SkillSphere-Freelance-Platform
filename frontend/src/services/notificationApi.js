@@ -10,4 +10,4 @@ export const markAsRead = (id) =>
   api.put(`/notifications/${id}`);
 
 export const markAllAsRead = () =>
-  api.put("/notifications/mark-all");
+  api.put("/notifications/mark-all-read");
